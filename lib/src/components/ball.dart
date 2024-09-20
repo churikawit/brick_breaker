@@ -44,9 +44,12 @@ class Ball extends CircleComponent with CollisionCallbacks, HasGameReference<Bri
       } else if (intersectionPoints.first.y >= game.height) {
         // velocity.y = -velocity.y;
         // removeFromParent();
-        /* add(RemoveEffect(                                       
+        add(RemoveEffect(                                       
           delay: 0.35,
-        )); */
+          onComplete: () {                                    // Modify from here
+              game.playState = PlayState.gameOver;
+            },
+        ));
       }
     } else if (other is Bat) {
       velocity.y = -velocity.y;
@@ -61,7 +64,7 @@ class Ball extends CircleComponent with CollisionCallbacks, HasGameReference<Bri
         velocity.x = -velocity.x;
       } else if (position.x > other.position.x) {
         velocity.x = -velocity.x;
-      }
+      } 
       velocity.setFrom(velocity * difficultyModifier);
     } else {
       debugPrint('collision with $other');

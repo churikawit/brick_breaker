@@ -13,8 +13,8 @@ import 'config.dart';
 
 enum PlayState { welcome, playing, gameOver, won }
 
-class BrickBreaker extends FlameGame 
-  with HasCollisionDetection, KeyboardEvents, TapDetector {
+class BrickBreaker extends FlameGame
+    with HasCollisionDetection, KeyboardEvents, TapDetector {
   BrickBreaker()
       : super(
           camera: CameraComponent.withFixedResolution(
@@ -24,12 +24,11 @@ class BrickBreaker extends FlameGame
         );
 
   final ValueNotifier<int> score = ValueNotifier(0);
-  final rand = math.Random();                                   // Add this variable
+  final rand = math.Random(); // Add this variable
   double get width => size.x;
   double get height => size.y;
 
-
-  late PlayState _playState;                                   // Add from here...
+  late PlayState _playState; // Add from here...
   PlayState get playState => _playState;
   set playState(PlayState playState) {
     _playState = playState;
@@ -53,7 +52,7 @@ class BrickBreaker extends FlameGame
 
     world.add(PlayArea());
 
-    playState = PlayState.welcome;                              // Add from here...
+    playState = PlayState.welcome; // Add from here...
   }
 
   void startGame() {
@@ -66,7 +65,7 @@ class BrickBreaker extends FlameGame
     playState = PlayState.playing;
     score.value = 0;
 
-    world.add(Ball(       
+    world.add(Ball(
         difficultyModifier: difficultyModifier,
         radius: ballRadius,
         position: size / 2,
@@ -74,12 +73,13 @@ class BrickBreaker extends FlameGame
             .normalized()
           ..scale(height / 4)));
 
-    world.add(Bat(                                              // Add from here...
+    world.add(Bat(
+        // Add from here...
         size: Vector2(batWidth, batHeight),
         cornerRadius: const Radius.circular(ballRadius / 2),
-        position: Vector2(width / 2, height * 0.95))); 
+        position: Vector2(width / 2, height * 0.95)));
 
-    world.addAll([                                        
+    world.addAll([
       for (var i = 0; i < brickColors.length; i++)
         for (var j = 1; j <= 5; j++)
           Brick(
@@ -91,25 +91,25 @@ class BrickBreaker extends FlameGame
           ),
     ]);
 
-    debugMode = true;                                           // To here.
+    debugMode = true; // To here.
   }
 
-  @override                                                     // Add from here...
+  @override // Add from here...
   void onTap() {
     super.onTap();
     startGame();
-  } 
+  }
 
-  @override                                                     // Add from here...
+  @override // Add from here...
   KeyEventResult onKeyEvent(
-      RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+      KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     super.onKeyEvent(event, keysPressed);
     switch (event.logicalKey) {
       case LogicalKeyboardKey.arrowLeft:
         world.children.query<Bat>().first.moveBy(-batStep);
       case LogicalKeyboardKey.arrowRight:
         world.children.query<Bat>().first.moveBy(batStep);
-      case LogicalKeyboardKey.space:                            // Add from here...
+      case LogicalKeyboardKey.space: // Add from here...
       case LogicalKeyboardKey.enter:
         startGame();
     }
@@ -117,5 +117,5 @@ class BrickBreaker extends FlameGame
   }
 
   @override
-  Color backgroundColor() => const Color(0xfff2e8cf); 
+  Color backgroundColor() => const Color(0xfff2e8cf);
 }
